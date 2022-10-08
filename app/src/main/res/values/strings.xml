@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Shopping List</string>
+    <string name="add_new_user">Add new user</string>
+    <string name="enter_username">Enter username</string>
+    <string name="create_user">Create User</string>
+    <string name="create_shopping_list_title">Create new shopping list</string>
+    <string name="enter_shopping_list_name">Enter name of shopping list</string>
 </resources>
