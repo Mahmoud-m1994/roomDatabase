@@ -19,4 +19,4 @@ Entities in shopping_list_db
 
 The relationship bweteen user_table and sopping_list_tabke is one-to-many. Which means that user can own 0 or as many lists he/she want. The same is for relationship between shopping_list and item_table
 
-![ER_database](app/src/main/res/drawable/Skjermbilde 2022-10-14 kl. 11.03.56.png)
+<img src="./app/src/main/res/drawable/er_diagram.png" width=400 height=350>
