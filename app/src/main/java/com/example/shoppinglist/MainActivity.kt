@@ -7,12 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.shoppinglist.component.MainScreen
 import com.example.shoppinglist.ui.theme.ShoppingListTheme
+import com.example.shoppinglist.viewmodels.ItemViewModel
 import com.example.shoppinglist.viewmodels.ShoppingListViewModel
 import com.example.shoppinglist.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val userViewModel : UserViewModel by viewModels()
         val shoppingListViewModel : ShoppingListViewModel by viewModels()
+        val itemViewModel : ItemViewModel by viewModels()
         setContent {
             ShoppingListTheme {
                 // A surface container using the 'background' color from the theme
@@ -30,7 +28,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(userViewModel = userViewModel, shoppingListViewModel = shoppingListViewModel)
+                    Navigation(
+                        userViewModel = userViewModel,
+                        shoppingListViewModel = shoppingListViewModel,
+                        itemViewModel = itemViewModel
+                    )
                 }
             }
         }
