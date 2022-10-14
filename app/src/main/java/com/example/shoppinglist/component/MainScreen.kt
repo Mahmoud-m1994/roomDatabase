@@ -23,15 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.shoppinglist.models.ShoppingList
+import androidx.navigation.NavController
+import com.example.shoppinglist.Activity
 import com.example.shoppinglist.viewmodels.ShoppingListViewModel
 import com.example.shoppinglist.viewmodels.UserViewModel
 
 
 @Composable
-fun MainScreen(userViewModel: UserViewModel, shoppingListViewModel: ShoppingListViewModel) {
+fun MainScreen(userViewModel: UserViewModel, shoppingListViewModel: ShoppingListViewModel, navController: NavController) {
     val users = userViewModel.allUsers.collectAsState(initial = listOf())
+    var userId : Long = 0
     var openDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +47,7 @@ fun MainScreen(userViewModel: UserViewModel, shoppingListViewModel: ShoppingList
         )) {
             MyHeader(users.value.isNotEmpty(), users.value.firstOrNull()?.username ?: "")
         }
-        if (users.value.isEmpty()) {
+        if (users.value.isEmpty() || users.value.firstOrNull() == null) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -54,6 +57,7 @@ fun MainScreen(userViewModel: UserViewModel, shoppingListViewModel: ShoppingList
                 CreateUserCard(userViewModel = userViewModel)
             }
         } else {
+            userId = users.value.firstOrNull()?.id!!
             val shoppingLists =
                 users.value.first().id?.toInt()
                     ?.let { shoppingListViewModel.getAllShoppingList(it).collectAsState(initial = listOf()) }
@@ -61,45 +65,52 @@ fun MainScreen(userViewModel: UserViewModel, shoppingListViewModel: ShoppingList
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 LazyColumn {
                     if (shoppingLists != null) {
                         items(shoppingLists.value.size) { user ->
-                            ShoppingListCard(shoppingLists.value[user])
+                            ShoppingListCard(
+                                shoppingList = shoppingLists.value[user],
+                                onDeleteClicked = {
+                                    shoppingLists.value[user].id?.let { it1 ->
+                                        shoppingListViewModel.deleteShoppingList(
+                                            it1.toInt(), userId.toInt())
+                                    }
+                                    openDialog = false
+                                },
+                                onEditClicked = {
+                                    openDialog = true
+                                },
+                                onCardClicked = {
+                                    navController.navigate(Activity.ShoppingListScreen.getArg(shoppingLists.value[user].id?.toInt() ?: -1))
+                                }
+                            )
                         }
                     }
                 }
-                FloatingActionButton(
-                    onClick = {
-                        openDialog = true
-                    },
-                    backgroundColor = Color.Green,
-                    contentColor = Color.White
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.End
                 ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                    FloatingActionButton(
+                        onClick = {
+                            openDialog = true
+                        },
+                        backgroundColor = Color(0xFF00BFA6)
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = "Add")
+                    }
                 }
             }
         }
         ShoppingListAlertDialog(
             openDialog = openDialog,
             onDismiss = { openDialog = false },
-            onConfirm = {
-                val userId = users.value.first().id?.toInt()
-                val userName = users.value.first().username
-                if (userId != null) {
-                    shoppingListViewModel.insert(
-                        ShoppingList(
-                            shoppingList_name = userName,
-                            created_by = userId,
-                            shared_with = null,
-                            access_type = null
-                        )
-                    )
-                }
-                openDialog = false
-            }
+            shoppingListViewModel = shoppingListViewModel,
+            user_id = userId,
+            onConfirm = { openDialog = false }
         )
     }
 }
