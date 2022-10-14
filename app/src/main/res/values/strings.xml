@@ -5,4 +5,8 @@
     <string name="create_user">Create User</string>
     <string name="create_shopping_list_title">Create new shopping list</string>
     <string name="enter_shopping_list_name">Enter name of shopping list</string>
+    <string name="edit_shopping_list">Edit shopping list</string>
+    <string name="delete_shopping_List">Delete Shopping List</string>
+    <string name="delete_shopping_List_item">Delete item</string>
+    <string name="edit_shopping_List_item">Edit item</string>
 </resources>
