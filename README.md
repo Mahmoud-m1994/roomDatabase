@@ -3,7 +3,7 @@
 ## **Android RoomDatabase, MVVM - pattern, Compose and dependency injection** ##
 ***
 ## *Screenrecord* ##
-Comming soon
+[ShoppingList-DB.webm](https://user-images.githubusercontent.com/70547966/195814808-91a55057-5089-4911-993a-ebd40ab3baa1.webm)
 
 ## *Overview* ##
 
