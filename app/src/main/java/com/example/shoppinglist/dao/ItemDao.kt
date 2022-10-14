@@ -14,7 +14,7 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Item)
 
-    @Query("SELECT * FROM item_table WHERE id = :shoppingListId")
+    @Query("SELECT * FROM item_table WHERE shoppingList_id = :shoppingListId ORDER BY id DESC")
     fun getAllItems(shoppingListId: Int): Flow<List<Item>>
 
     @Update

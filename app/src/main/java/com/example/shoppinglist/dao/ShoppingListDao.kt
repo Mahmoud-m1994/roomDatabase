@@ -23,7 +23,7 @@ interface ShoppingListDao {
         sharedWith: Int
     )
 
-    @Query("SELECT * FROM shopping_list_table WHERE created_by = :userId OR shared_with = :userId")
+    @Query("SELECT * FROM shopping_list_table WHERE created_by = :userId OR shared_with = :userId ORDER BY id DESC")
     fun getAllShoppingList(userId: Int): Flow<List<ShoppingList>>
 
     @Query("SELECT * FROM shopping_list_table WHERE created_by LIKE :userId")
